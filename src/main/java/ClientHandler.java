@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class ClientHandler implements Runnable {
@@ -39,13 +41,13 @@ public class ClientHandler implements Runnable {
     }
 
     public void handleMessage(String messageFromClient) {
-        if (messageFromClient != null) {
+        if (messageFromClient == null) {
             return;
         }
 
         try {
-            if (messageFromClient.equals("*1\\r\\n$4\\r\\nPING\\r\\n")) {
-                this.bufferedWriter.write("+PONG\\r\\n");
+            if (messageFromClient.equals("PING")) {
+                this.bufferedWriter.write("+PONG\r");
                 this.bufferedWriter.newLine();
                 this.bufferedWriter.flush();
             }

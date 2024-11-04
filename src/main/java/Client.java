@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     private Socket socket;
@@ -34,6 +35,17 @@ public class Client {
         }).start();
     }
 
+    public void sendMessage(String message) {
+        try {
+            out.write(message);       // Write the message to the buffer
+            out.newLine();            // Add a newline to signify the end of the message
+            out.flush();              // Flush the buffer to send the message
+        } catch (IOException e) {
+            closeEverything(socket, in, out); // Handle exceptions by closing resources
+        }
+    }
+
+
     public void closeEverything(Socket socket, BufferedReader in, BufferedWriter out) {
         try {
             if (in != null) {
@@ -54,5 +66,23 @@ public class Client {
         Socket socket = new Socket("localhost", 6379);
         Client client = new Client(socket);
         client.listenForMessages();
+
+        Scanner scanner = new Scanner(System.in);
+        String message;
+
+        System.out.println("Type your message. Type 'exit' to quit.");
+
+        while (socket.isConnected()) {
+            message = scanner.nextLine();
+
+            if (message.equals("exit")) {
+                break;
+            }
+
+            client.sendMessage(message);
+        }
+
+        scanner.close();
+        client.closeEverything(socket, client.in, client.out);
     }
 }

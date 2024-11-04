@@ -14,6 +14,7 @@ public class Main {
         Socket clientSocket = null;
         int port = 6379;
         try {
+            /**
           serverSocket = new ServerSocket(port);
           // Since the tester restarts your program quite often, setting SO_REUSEADDR
           // ensures that we don't run into 'Address already in use' errors
@@ -23,6 +24,10 @@ public class Main {
           OutputStream outputStream = clientSocket.getOutputStream();
 
           outputStream.write("+PONG\r\n".getBytes());
+             */
+
+            Server server = new Server(port);
+
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
